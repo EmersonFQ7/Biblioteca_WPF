@@ -1,0 +1,144 @@
+﻿<Window x:Class="Biblioteca.WPF.VentanaDevolucion"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Registrar Devolucion"
+        Height="720" Width="1180"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ENCABEZADO -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Registrar Devolucion" Style="{StaticResource Titulo}"/>
+            <TextBlock Text="Registra la devolucion de los libros prestados y calcula la multa por retraso"
+                       Style="{StaticResource Subtitulo}"/>
+        </StackPanel>
+
+        <!-- SELECCION DE SOCIO -->
+        <Border Grid.Row="1" Style="{StaticResource Tarjeta}" Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                    <TextBlock Text="Socio" Style="{StaticResource Etiqueta}"/>
+                    <ComboBox x:Name="cboSocio"
+                              DisplayMemberPath="Nombre"
+                              SelectedValuePath="Id"/>
+                </StackPanel>
+
+                <Button Grid.Column="1" Content="Cargar prestamos"
+                        Style="{StaticResource BotonPrimario}"
+                        VerticalAlignment="Bottom"
+                        Click="BtnCargar_Click"/>
+            </Grid>
+        </Border>
+
+        <!-- PRESTAMOS Y LIBROS -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Prestamos pendientes -->
+            <Border Grid.Column="0" Style="{StaticResource Tarjeta}" Padding="16" Margin="0,0,8,0">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Prestamos pendientes"
+                               FontSize="15" FontWeight="SemiBold"
+                               Foreground="{StaticResource Texto}"
+                               Margin="0,0,0,12"/>
+
+                    <DataGrid x:Name="dgPrestamos"
+                              IsReadOnly="True"
+                              Background="Transparent"
+                              BorderThickness="0"
+                              SelectionChanged="DgPrestamos_SelectionChanged">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="N#"            Binding="{Binding Id}"             Width="60"/>
+                            <DataGridTextColumn Header="Fecha prestamo" Binding="{Binding FechaPrestamo, StringFormat=d}"  Width="130"/>
+                            <DataGridTextColumn Header="Fecha limite"   Binding="{Binding FechaLimite,   StringFormat=d}"  Width="130"/>
+                            <DataGridTextColumn Header="Estado"         Binding="{Binding Estado}"        Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+
+            <!-- Libros del prestamo seleccionado -->
+            <Border Grid.Column="1" Style="{StaticResource Tarjeta}" Padding="16" Margin="8,0,0,0">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Libros pendientes del prestamo"
+                               FontSize="15" FontWeight="SemiBold"
+                               Foreground="{StaticResource Texto}"
+                               Margin="0,0,0,12"/>
+
+                    <DataGrid x:Name="dgDetalles"
+                              IsReadOnly="True"
+                              Background="Transparent"
+                              BorderThickness="0"
+                              SelectionChanged="DgDetalles_SelectionChanged">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Libro ID" Binding="{Binding LibroId}"     Width="90"/>
+                            <DataGridTextColumn Header="Titulo"   Binding="{Binding TituloLibro}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+        </Grid>
+
+        <!-- FECHA Y RESUMEN -->
+        <Border Grid.Row="3" Style="{StaticResource Tarjeta}" Margin="0,16,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                    <TextBlock Text="Fecha de devolucion" Style="{StaticResource Etiqueta}"/>
+                    <DatePicker x:Name="dpFechaDevolucion"
+                                SelectedDateChanged="DpFechaDevolucion_SelectedDateChanged"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="16,0">
+                    <TextBlock x:Name="lblInfoRetraso"
+                               Text="Selecciona un prestamo y un libro para calcular la multa"
+                               Foreground="{StaticResource TextoSuave}"
+                               FontSize="13"/>
+                    <TextBlock x:Name="lblMulta"
+                               Text="Multa: S/ 0.00"
+                               FontSize="20" FontWeight="SemiBold"
+                               Foreground="{StaticResource Acento}"
+                               Margin="0,6,0,0"/>
+                </StackPanel>
+
+                <Button Grid.Column="2" Content="Registrar devolucion"
+                        Style="{StaticResource BotonPrimario}"
+                        Width="200"
+                        VerticalAlignment="Center"
+                        Click="BtnRegistrar_Click"/>
+            </Grid>
+        </Border>
+
+        <!-- CERRAR -->
+        <StackPanel Grid.Row="4" Orientation="Horizontal"
+                    HorizontalAlignment="Right" Margin="0,12,0,0">
+            <Button Content="Cerrar"
+                    Style="{StaticResource BotonSecundario}"
+                    Width="120"
+                    Click="BtnCerrar_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
